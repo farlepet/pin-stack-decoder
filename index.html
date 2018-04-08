@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pin Stack Decoder Assistant</title>
+        <link href='css/main.css' rel='stylesheet' type='text/css'>
+        <script src="lib/jquery-3.3.1.min.js"></script>
+        <script src="js/index.js"></script>
+    </head>
+    <body>
+        <div class="mainContainer">
+            <label for="spec-select">Pin Spec: </label>
+            <select name="spec-select" id="pinSpecSelect">
+            </select>
+            <br/>
+
+            <label for="csv-file-input">CSV pin listing (optional):</label>
+            <input type="file" name="csv-file-input" id="csvFileInput"/>
+            <br/>
+
+            <label for="num-sacks">Stacks: </label>
+            <input type="number" name="num-stacks" id="numStacks" min="1" max="12" step="1" value="6" style="width: 3em;">
+            <br/>
+
+            <label for="num-builup-pins">Build-up pins: </label>
+            <input type="number" name="num-buildup-pins" id="numBuildupPins" min="0" max="5" step="1" value="1" style="width: 3em;"/>
+            <br/>
+
+            <label for="meas-unit-select">Units: </label>
+            <select name="meas-unit-select" id="measUnitSelect">
+                <option value="1.0">Inches</option>
+                <option value="0.001">Mil/Thou</option>
+                <option value="0.393701">Centimeters</option>
+                <option value="0.0393701">Millimeters</option>
+            </select>
+            <br/>
+
+            <br/>
+            <div class="pinningArea">
+            </div>
+            <br/>
+
+            <input type="button" value="Calculate!" id="runCalculations"/>
+            <br/>
+            <br/>
+
+            <b>Pinning:</b><br/>
+            <table class="pinningTable">
+            </table>
+            <br/>
+
+            <b>Control: </b><table class="controlBittingTable"></table><br/>
+            <b>Change:  </b><table class="changeBittingTable"></table><br/>
+        </div>
+    </body>
+</html>
