@@ -4,6 +4,8 @@ Pin Stack Decoder
 A web app that assists in decoding pin stacks from disassembled lock in order to
 determine various compatible keys.
 
+Try it out: https://farlepet.github.io/pin-stack-decoder/
+
 Currently supported formats:
  * Best/Sargent/Other SFIC
    * A2
