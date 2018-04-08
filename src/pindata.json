@@ -15,6 +15,40 @@
 
             "stackHeight":  23,
             "controlShear": 10
+        },
+
+        {
+            "name": "A3",
+
+            "bottomPinStartNumber": 0,
+            "bottomPinSizes":       7,
+            "bottomPinStartSize":   0.110,
+            "bottomPinStepSize":    0.018,
+
+            "buildupPinStartNumber": 1,
+            "buildupPinSizes":       13,
+            "buildupPinStartSize":   0.018,
+            "buildupPinStepSize":    0.018,
+
+            "stackHeight":  16,
+            "controlShear": 7
+        },
+
+        {
+            "name": "A4",
+
+            "bottomPinStartNumber": 0,
+            "bottomPinSizes":       6,
+            "bottomPinStartSize":   0.110,
+            "bottomPinStepSize":    0.021,
+
+            "buildupPinStartNumber": 1,
+            "buildupPinSizes":       11,
+            "buildupPinStartSize":   0.021,
+            "buildupPinStepSize":    0.021,
+
+            "stackHeight":  14,
+            "controlShear": 6
         }
     ]
 }
