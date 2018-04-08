@@ -8,7 +8,7 @@ Try it out: https://farlepet.github.io/pin-stack-decoder/
 
 Currently supported formats:
  * Best/Sargent/Other SFIC
-   * A2
+   * A2, A3, A4
 
 To add more keys, edit `src/pindata.json` If you have a key specification you would
 like for me to add, just contact me, or edit pindata.json and send me a pull request.
