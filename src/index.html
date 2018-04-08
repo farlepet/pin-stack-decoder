@@ -15,12 +15,16 @@
             </select>
             <br/>
 
-            <label for="num-sacks">Number of stacks: </label>
-            <input type="number" name="num-stacks" id="numStacks" min="1" max="12" step="1" value="6"/>
+            <label for="csv-file-input">CSV pin listing (optional):</label>
+            <input type="file" name="csv-file-input" id="csvFileInput"/>
             <br/>
 
-            <label for="num-builup-pins">Number of build-up (master/control) pins: </label>
-            <input type="number" name="num-buildup-pins" id="numBuildupPins" min="0" max="5" step="1" value="1"/>
+            <label for="num-sacks">Stacks: </label>
+            <input type="number" name="num-stacks" id="numStacks" min="1" max="12" step="1" value="6" style="width: 3em;">
+            <br/>
+
+            <label for="num-builup-pins">Build-up pins: </label>
+            <input type="number" name="num-buildup-pins" id="numBuildupPins" min="0" max="5" step="1" value="1" style="width: 3em;"/>
             <br/>
 
             <br/>
@@ -29,6 +33,16 @@
             <br/>
 
             <input type="button" value="Calculate!" id="runCalculations"/>
+            <br/>
+            <br/>
+
+            <b>Pinning:</b><br/>
+            <table class="pinningTable">
+            </table>
+            <br/>
+
+            <b>Control: </b><table class="controlBittingTable"></table><br/>
+            <b>Change:  </b><table class="changeBittingTable"></table><br/>
         </div>
     </body>
 </html>

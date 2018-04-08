@@ -11,7 +11,10 @@
             "buildupPinStartNumber": 2,
             "buildupPinSizes":       18,
             "buildupPinStartSize":   0.025,
-            "buildupPinStepSize":    0.0125
+            "buildupPinStepSize":    0.0125,
+
+            "stackHeight":  23,
+            "controlShear": 10
         }
     ]
 }

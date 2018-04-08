@@ -5,6 +5,9 @@ class PinStackDecoder {
     /** Depth and Space Data database */
     private pinData: PinDataDatabase;
 
+    /** File input used to open CSV file containing pin lengths */
+    private csvFileInput: JQuery;
+
     /** Pin specification select element */
     private pinSpecSelect: JQuery;
     /** Element to select number of pin stacks */
@@ -14,12 +17,21 @@ class PinStackDecoder {
 
     /** DIV containing inputs for pinning */
     private pinningArea: JQuery;
+    /** Table for displaying calculated pin values */
+    private pinningTable: JQuery;
+    /** Table for displaying control key bitting */
+    private controlBittingTable: JQuery;
+    /** Table for displaying change/master key bittings */
+    private changeBittingTable:  JQuery;
 
     /** Button to initiate calculations */
     private runCalculationsButton: JQuery;
 
-
+    /** Array of pin length input boxes */
     private pinArray: JQuery[][];
+
+    /** Array of calculated pin numbers */
+    private pinNumbers: number[][];
 
     /**
      * Constructor, grabs elements from the DOM
@@ -27,15 +39,21 @@ class PinStackDecoder {
     public constructor() {
         this.pinData = new PinDataDatabase();
 
+        this.csvFileInput   = $("#csvFileInput");
+
         this.pinSpecSelect  = $("#pinSpecSelect");
         this.numStacks      = $("#numStacks");
         this.numBuildupPins = $("#numBuildupPins");
 
-        this.pinningArea = $(".pinningArea");
+        this.pinningArea         = $(".pinningArea");
+        this.pinningTable        = $(".pinningTable");
+        this.controlBittingTable = $(".controlBittingTable");
+        this.changeBittingTable  = $(".changeBittingTable");
 
         this.runCalculationsButton = $("#runCalculations");
 
-        this.pinArray = Array();
+        this.pinArray   = Array();
+        this.pinNumbers = Array();
     }
 
     /**
@@ -44,6 +62,8 @@ class PinStackDecoder {
      */
     public init() {
         this.pinData.readDatabase("pindata.json", () => this.onPinDataUpdate());
+
+        this.csvFileInput.on("change", () => this.onCSVFileSelect());
 
         this.pinSpecSelect.on("change",  () => this.onPinSpecChange());
 
@@ -72,9 +92,11 @@ class PinStackDecoder {
         if(idx !== undefined) {
             let bottom  = this.pinData.getBottomSizes(+idx);
             let buildup = this.pinData.getBuildupSizes(+idx);
+            let control = this.pinData.getControlShear(+idx);
 
             PinStackMath.setBottomPinData(bottom);
             PinStackMath.setBuildupPinData(buildup);
+            PinStackMath.setControlShear(control);
         }
     }
 
@@ -101,7 +123,10 @@ class PinStackDecoder {
     }
 
     private runCalculations() {
+        this.pinNumbers = Array();
+
         for(let i = 0; i < this.pinArray.length; i++) {
+            this.pinNumbers[i] = Array();
             for(let j = 0; j < this.pinArray[i].length; j++) {
                 let pinLength = this.pinArray[i][j].val();
 
@@ -109,13 +134,85 @@ class PinStackDecoder {
                     // TODO: Unit conversion, if necessary
                     if(j < this.pinArray[i].length - 1) { // Build-up/driver pin
                         let pin = PinStackMath.buildupSizeToNumber(+pinLength);
-                        console.info("Buildup pin number: (" + i + "," + j + "): " + pin);
+                        this.pinNumbers[i][j] = pin;
                     } else { // Bottom pin
                         let pin = PinStackMath.bottomSizeToNumber(+pinLength);
-                        console.info("Bottom pin number: (" + i + "," + j + "): " + pin);
+                        this.pinNumbers[i][j] = pin;
                     }
                 }
             }
         }
+
+        console.debug(this.pinNumbers);
+
+        this.pinningTable.empty();
+        for(let i = 0; i < this.pinNumbers[0].length; i++) {
+            let row = $("<tr/>");
+            for(let j = 0; j < this.pinNumbers.length; j++) {
+                row.append($("<td/>").text(this.pinNumbers[j][i]));
+            }
+            this.pinningTable.append(row);
+        }
+
+        let control = PinStackMath.getControlBitting(this.pinNumbers);
+        let changes = PinStackMath.getChangeBittings(this.pinNumbers);
+
+        console.debug(control);
+        console.debug(changes);
+
+        this.controlBittingTable.empty();
+        this.changeBittingTable.empty();
+
+        let controlRow = $("<tr/>");
+        for(let i = 0; i < control.length; i++) {
+            controlRow.append($("<td/>").text(control[i]));
+        }
+        this.controlBittingTable.append(controlRow);
+
+        for(let i = 0; i < changes.length; i++) {
+            let row = $("<tr/>");
+            for(let j = 0; j < changes[i].length; j++) {
+                row.append($("<td/>").text(changes[i][j]));
+            }
+            this.changeBittingTable.append(row);
+        }
     }
+
+
+    private loadCSV(csv: string) {
+        let array = Array();
+
+        csv.split(/(?:\r\n|\r|\n)/g).forEach((val: string, row: number) => {
+            if(val.length < 1) return;
+            array[row] = Array();
+            val.split(",").forEach((val: string, col: number) => {
+                array[row][col] = +val;
+            })
+        });
+
+        console.debug(array);
+
+        this.numStacks.val(array[0].length);
+        this.numBuildupPins.val(array.length - 2);
+        this.onPinNumberChange();
+
+        for(let i = 0; i < array.length; i++) {
+            for(let j = 0; j < array[i].length; j++) {
+                this.pinArray[j][i].val(array[i][j]);
+            }
+        }
+    }
+
+    private onCSVFileSelect() {
+        console.info(this.csvFileInput.prop("files")[0]);
+
+        let fr = new FileReader();
+        fr.onload = () => {
+            console.debug(fr.result);
+            this.loadCSV(fr.result);
+        };
+
+        fr.readAsText(this.csvFileInput.prop("files")[0]);
+    }
+
 }

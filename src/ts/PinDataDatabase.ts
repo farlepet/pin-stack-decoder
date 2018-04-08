@@ -100,4 +100,16 @@ class PinDataDatabase {
 
         return ret;
     }
+
+
+    public getStackHeight(idx: number): number {
+        if(this.pinData == null) return 0;
+        return this.pinData.pindata[idx].stackHeight;
+    }
+
+    public getControlShear(idx: number): number {
+        if(this.pinData == null) return 0;
+        if(!("controlShear" in this.pinData.pindata[idx])) return 0;
+        return this.pinData.pindata[idx].controlShear;
+    }
 }

@@ -27,6 +27,10 @@ interface PinDataEntry {
     /** Step between each consecutive buildup pin size */
     buildupPinStepSize:    number;
 
+    /** Suggested height of pin stack */
+    stackHeight:  number;
+    /** Height of control shear above change shear, used to determine control key bitting */
+    controlShear: number;
 
 
     bottomSizes:  PinDataJsonEntrySize[];

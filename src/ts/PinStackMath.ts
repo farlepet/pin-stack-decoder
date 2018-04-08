@@ -5,12 +5,18 @@ namespace PinStackMath {
     var buildupPinData: PinDataJsonEntrySize[] | null = null;
     var bottomPinData:  PinDataJsonEntrySize[] | null = null;
 
+    var controlShear: number | null = null;
+
     export function setBuildupPinData(pinData: PinDataJsonEntrySize[]) {
         buildupPinData = pinData;
     }
 
     export function setBottomPinData(pinData: PinDataJsonEntrySize[]) {
         bottomPinData = pinData;
+    }
+
+    export function setControlShear(shear: number) {
+        controlShear = shear;
     }
 
     function getNearestPinNumber(pinData: PinDataJsonEntrySize[], size: number): number {
@@ -38,5 +44,46 @@ namespace PinStackMath {
             console.error("PinStackMath.bottomSizeToNumber: bottomPinData is NULL!");
             return 0;
         }
+    }
+
+
+    export function getControlBitting(pins: number[][]): number[] {
+        if(controlShear == null) {
+            console.error("PinStackMath.getControlBitting: controlShear is NULL!");
+            return Array();;
+        }
+
+        let ret = Array();
+
+        for(let i = 0; i < pins.length; i++) {
+            let sum = 0;
+            for(let j = 1; j < pins[i].length; j++) {
+                sum += pins[i][j];
+            }
+            ret[i] = sum - controlShear;
+        }
+
+        return ret;
+    }
+
+    export function getChangeBittings(pins: number[][]): number[][] {
+        let ret = Array();
+
+        for(let i = 0; i < pins.length; i++) {
+            let sum = 0;
+            let n = 0;
+            let j = pins.length - 1;
+            let end = (controlShear === 0) ? 1 : 2;
+            if(controlShear !== 0) j--;
+
+            for(; j >= end; j--) {
+                if(i == 0) ret[n] = Array();
+                sum += pins[i][j];
+                ret[n][i] = sum;
+                n++;
+            }
+        }
+
+        return ret;
     }
 }
