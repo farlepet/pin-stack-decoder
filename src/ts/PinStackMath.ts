@@ -1,8 +1,17 @@
+/// <reference path="./PinDataDatabase.ts"/>
 /// <reference path="./PinDataJson.ts"/>
 
 namespace PinStackMath {
     var buildupPinData: PinDataJsonEntrySize[] | null = null;
     var bottomPinData:  PinDataJsonEntrySize[] | null = null;
+
+    export function setBuildupPinData(pinData: PinDataJsonEntrySize[]) {
+        buildupPinData = pinData;
+    }
+
+    export function setBottomPinData(pinData: PinDataJsonEntrySize[]) {
+        bottomPinData = pinData;
+    }
 
     function getNearestPinNumber(pinData: PinDataJsonEntrySize[], size: number): number {
         for(let i = 1; i < pinData.length; i++) {
