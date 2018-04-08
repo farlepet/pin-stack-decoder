@@ -1,0 +1,17 @@
+{
+    "pindata": [
+        {
+            "name": "A2",
+
+            "bottomPinStartNumber": 0,
+            "bottomPinSizes":       10,
+            "bottomPinStartSize":   0.110,
+            "bottomPinStepSize":    0.0125,
+
+            "buildupPinStartNumber": 2,
+            "buildupPinSizes":       18,
+            "buildupPinStartSize":   0.025,
+            "buildupPinStepSize":    0.0125
+        }
+    ]
+}
