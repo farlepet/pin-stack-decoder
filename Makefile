@@ -8,7 +8,7 @@ scss-compile: $(DIST)/css/
 
 copy-web: $(DIST)
 	cp -r lib dist/
-	cp src/index.html src/dsd.json dist
+	cp src/index.html src/pindata.json dist
 
 clean:
 	rm -r dist
