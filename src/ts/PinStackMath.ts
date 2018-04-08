@@ -72,9 +72,8 @@ namespace PinStackMath {
         for(let i = 0; i < pins.length; i++) {
             let sum = 0;
             let n = 0;
-            let j = pins.length - 1;
+            let j = pins[0].length - 1;
             let end = (controlShear === 0) ? 1 : 2;
-            if(controlShear !== 0) j--;
 
             for(; j >= end; j--) {
                 if(i == 0) ret[n] = Array();

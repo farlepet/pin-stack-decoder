@@ -14,6 +14,8 @@ class PinStackDecoder {
     private numStacks: JQuery;
     /** Element to select (max) number of build-up pins */
     private numBuildupPins: JQuery;
+    /** Slement to select units of measurement */
+    private measUnitSelect: JQuery;
 
     /** DIV containing inputs for pinning */
     private pinningArea: JQuery;
@@ -44,6 +46,7 @@ class PinStackDecoder {
         this.pinSpecSelect  = $("#pinSpecSelect");
         this.numStacks      = $("#numStacks");
         this.numBuildupPins = $("#numBuildupPins");
+        this.measUnitSelect = $("#measUnitSelect");
 
         this.pinningArea         = $(".pinningArea");
         this.pinningTable        = $(".pinningTable");
@@ -125,25 +128,26 @@ class PinStackDecoder {
     private runCalculations() {
         this.pinNumbers = Array();
 
+        let scaleFactor = this.measUnitSelect.val();
+        if(scaleFactor === undefined) return;
+
         for(let i = 0; i < this.pinArray.length; i++) {
             this.pinNumbers[i] = Array();
             for(let j = 0; j < this.pinArray[i].length; j++) {
-                let pinLength = this.pinArray[i][j].val();
+                let pinLength   = this.pinArray[i][j].val();
 
                 if(pinLength !== undefined) {
                     // TODO: Unit conversion, if necessary
                     if(j < this.pinArray[i].length - 1) { // Build-up/driver pin
-                        let pin = PinStackMath.buildupSizeToNumber(+pinLength);
+                        let pin = PinStackMath.buildupSizeToNumber(+pinLength * +scaleFactor);
                         this.pinNumbers[i][j] = pin;
                     } else { // Bottom pin
-                        let pin = PinStackMath.bottomSizeToNumber(+pinLength);
+                        let pin = PinStackMath.bottomSizeToNumber(+pinLength * +scaleFactor);
                         this.pinNumbers[i][j] = pin;
                     }
                 }
             }
         }
-
-        console.debug(this.pinNumbers);
 
         this.pinningTable.empty();
         for(let i = 0; i < this.pinNumbers[0].length; i++) {
@@ -156,9 +160,6 @@ class PinStackDecoder {
 
         let control = PinStackMath.getControlBitting(this.pinNumbers);
         let changes = PinStackMath.getChangeBittings(this.pinNumbers);
-
-        console.debug(control);
-        console.debug(changes);
 
         this.controlBittingTable.empty();
         this.changeBittingTable.empty();
@@ -190,8 +191,6 @@ class PinStackDecoder {
             })
         });
 
-        console.debug(array);
-
         this.numStacks.val(array[0].length);
         this.numBuildupPins.val(array.length - 2);
         this.onPinNumberChange();
@@ -204,11 +203,8 @@ class PinStackDecoder {
     }
 
     private onCSVFileSelect() {
-        console.info(this.csvFileInput.prop("files")[0]);
-
         let fr = new FileReader();
         fr.onload = () => {
-            console.debug(fr.result);
             this.loadCSV(fr.result);
         };
 
